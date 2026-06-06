@@ -1,0 +1,36 @@
+{
+  "name": "media-for-you-graphql-api",
+  "version": "1.0.0",
+  "description": "Media For You GraphQL API with Express, Apollo Server, Knex, PostgreSQL, and gRPC microservices.",
+  "main": "api/server.js",
+  "scripts": {
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "migrate": "knex migrate:latest --knexfile db/knexfile.js",
+    "seed": "knex seed:run --knexfile db/knexfile.js",
+    "start:auth": "node services/auth/server.js",
+    "start:song": "node services/song/server.js",
+    "start:playlist": "node services/playlist/server.js",
+    "start:api": "node api/server.js",
+    "dev": "concurrently -k -n auth,song,playlist,api \"node services/auth/server.js\" \"node services/song/server.js\" \"node services/playlist/server.js\" \"wait-on tcp:50051 tcp:50052 tcp:50053 && nodemon api/server.js\""
+  },
+  "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/express4": "^1.1.2",
+    "@grpc/grpc-js": "^1.10.9",
+    "@grpc/proto-loader": "^0.7.13",
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "graphql": "^16.8.1",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "pg": "^8.11.5",
+    "wait-on": "^7.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

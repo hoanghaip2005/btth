@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package song;
+
+message Song {
+  string id = 1;
+  string title = 2;
+  string artist = 3;
+  int32 duration_seconds = 4;
+  string genre = 5;
+  string audio_url = 6;
+  string created_at = 7;
+}
+
+message PageInfo {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  int32 total_pages = 4;
+}
+
+message SongPage {
+  repeated Song items = 1;
+  PageInfo page_info = 2;
+}
+
+message PaginationRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message IdRequest {
+  string id = 1;
+}
+
+service SongService {
+  rpc ListSongs(PaginationRequest) returns (SongPage);
+  rpc GetSong(IdRequest) returns (Song);
+}

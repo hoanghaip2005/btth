@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package playlist;
+
+import "song.proto";
+
+message PageInfo {
+  int32 page = 1;
+  int32 limit = 2;
+  int32 total = 3;
+  int32 total_pages = 4;
+}
+
+message PlaylistSummary {
+  string id = 1;
+  string user_id = 2;
+  string name = 3;
+  string description = 4;
+  bool is_public = 5;
+  string created_at = 6;
+}
+
+message Playlist {
+  string id = 1;
+  string user_id = 2;
+  string name = 3;
+  string description = 4;
+  bool is_public = 5;
+  string created_at = 6;
+  repeated song.Song songs = 7;
+}
+
+message PlaylistPage {
+  repeated PlaylistSummary items = 1;
+  PageInfo page_info = 2;
+}
+
+message PlaylistSummaryList {
+  repeated PlaylistSummary items = 1;
+}
+
+message UserRequest {
+  string user_id = 1;
+}
+
+message PaginationRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message PlaylistLookupRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message CreatePlaylistRequest {
+  string user_id = 1;
+  string name = 2;
+  string description = 3;
+  bool is_public = 4;
+}
+
+message UpdatePlaylistRequest {
+  string user_id = 1;
+  string id = 2;
+  string name = 3;
+  bool has_name = 4;
+  string description = 5;
+  bool has_description = 6;
+  bool is_public = 7;
+  bool has_is_public = 8;
+}
+
+message DeletePlaylistRequest {
+  string user_id = 1;
+  string id = 2;
+}
+
+message PlaylistSongRequest {
+  string user_id = 1;
+  string playlist_id = 2;
+  string song_id = 3;
+}
+
+message BoolResponse {
+  bool value = 1;
+}
+
+service PlaylistService {
+  rpc ListMyPlaylists(UserRequest) returns (PlaylistSummaryList);
+  rpc GetPlaylist(PlaylistLookupRequest) returns (Playlist);
+  rpc ListPublicPlaylists(PaginationRequest) returns (PlaylistPage);
+  rpc CreatePlaylist(CreatePlaylistRequest) returns (PlaylistSummary);
+  rpc UpdatePlaylist(UpdatePlaylistRequest) returns (PlaylistSummary);
+  rpc DeletePlaylist(DeletePlaylistRequest) returns (BoolResponse);
+  rpc AddSongToPlaylist(PlaylistSongRequest) returns (Playlist);
+  rpc RemoveSongFromPlaylist(PlaylistSongRequest) returns (Playlist);
+}
